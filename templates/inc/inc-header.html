@@ -26,7 +26,7 @@
             </div>
             {% if request.user.is_authenticated %}
                 <span style="color: white;">
-                    Welcome,  {{request.user.username}}
+                    Welcome, {{request.user.username }}
                 </span> &nbsp;&nbsp; <a href="{% url "logout" %}">logout</a>
             {% else %}
                 <form method="post" action="{% url "login" %}">
