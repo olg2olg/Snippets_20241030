@@ -1,5 +1,5 @@
 from django.http import Http404, HttpResponse #HttpResponseNotFound
-from django.shortcuts import render, redirect
+from django.shortcuts import get_object_or_404, render, redirect
 from MainApp.models import Snippet
 from django.core.exceptions import ObjectDoesNotExist
 from MainApp.forms import SnippetForm
@@ -48,8 +48,18 @@ def snippet_detail(request, snippet_id: int):
     #     'snippet': snippet
     #     }
     context['snippet'] = snippet
+    context['type'] = "view"
     return render(request, 'pages/snippet_detail.html', context) 
 
+def snippet_edit(request, snippet_id:int):
+    pass
+
+def snippet_delete(request, snippet_id:int):
+    #if request.method == "POST":
+    if request.method == "POST" or request.method == "GET": #GET для рис=Корзина     
+        snippet = get_object_or_404(Snippet, id=snippet_id)
+        snippet.delete()
+    return redirect('snippets-page')
 
 # def create_snippet(request):
 #     #если в запросе метод POST, то распечатает значения
