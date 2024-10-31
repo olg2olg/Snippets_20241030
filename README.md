@@ -21,6 +21,8 @@ python manage.py shell_plus --ipython
 ### Выгрузить данные из БД
 ```
 python manage.py dumpdata MainApp --indent 4 > MainApp/fixtures/save_all.json
+python manage.py dumpdata > fixtures/db_all.json
+
 ```
 ### Загрузить данные в БД
 ```

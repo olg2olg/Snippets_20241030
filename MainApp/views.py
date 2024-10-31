@@ -31,7 +31,8 @@ def add_snippet_page(request):
        return render(request,'pages/add_snippet.html',{'form': form})
 
 def snippets_page(request):
-    snippets = Snippet.objects.all()
+    #snippets = Snippet.objects.all()
+    snippets = Snippet.objects.filter(is_public=True)
     context = {
         'pagename': 'Просмотр сниппетов',
         'snippets': snippets

@@ -16,4 +16,5 @@ class Snippet(models.Model):
     creation_date = models.DateTimeField(auto_now=True)
     user = models.ForeignKey(to=User, on_delete=models.CASCADE,
                         blank=True, null=True)
+    is_public=models.BooleanField(default=True)
 
