@@ -47,10 +47,20 @@ def create_snippet(request):
     #<QueryDict: {'csrfmiddlewaretoken': ['vRxqcWoOa4fXwxHZnu1H6Qtrn4mKGN54jefQ8Jqewc2TKcjYo65tpt2ro5yZWDyA'], 
     # 'name': ['third'], 'lang': ['cpp'], 'code': ['cout']}>
     #[31/Oct/2024 13:26:12] "POST /snippets/create HTTP/1.1" 200 4
-    from pprint import pprint
 
+    #from pprint import pprint
+
+    # if request.method == "POST":
+    #     pprint(vars(request))
+    #     pprint(request.POST)
+    #     return HttpResponse("Done")
+    
     if request.method == "POST":
-        pprint(request.POST)
-        return HttpResponse("Done")
+        form = SnippetForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect("snippets-page") # GET /snippets/list
+        return render(request,'pages/add_snippet.html',{'form': form})
+
 
 
