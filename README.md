@@ -27,7 +27,6 @@ python manage.py dumpdata MainApp --indent 4 > MainApp/fixtures/save_all.json
 python manage.py loaddata MainApp/fixtures/save_all.json
 ```
 ----------------------------------------------------------------------------
-----------------------------------------------------------------------------
 0) Репозиторий был сделан дома с нуля и залит на github
 1) Поэтому в Москве:
     git clone https://github.com/olg2olg/Snippets_20241030.git Snippets
