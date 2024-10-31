@@ -3,11 +3,11 @@ from django.shortcuts import get_object_or_404, render, redirect
 from MainApp.models import Snippet
 from django.core.exceptions import ObjectDoesNotExist
 from MainApp.forms import SnippetForm
+from django.contrib import auth
 
 def index_page(request):
     context = {'pagename': 'PythonBin'}
     return render(request, 'pages/index.html', context)
-
 
 def add_snippet_page(request):
     # Создаем пустую форму при запросе методом GET
@@ -26,7 +26,6 @@ def add_snippet_page(request):
            return redirect("snippets-page") # GET /snippets/list
        return render(request,'pages/add_snippet.html',{'form': form})
 
-
 def snippets_page(request):
     snippets = Snippet.objects.all()
     context = {
@@ -34,7 +33,6 @@ def snippets_page(request):
         'snippets': snippets
         }
     return render(request, 'pages/view_snippets.html', context)
-
 
 def snippet_detail(request, snippet_id: int):
     context = { 'pagename': 'Просмотр сниппета' }
@@ -111,5 +109,20 @@ def snippet_delete(request, snippet_id:int):
 #             return redirect("snippets-page") # GET /snippets/list
 #         return render(request,'pages/add_snippet.html',{'form': form})
 
+def login(request):
+   if request.method == 'POST':
+       username = request.POST.get("username")
+       password = request.POST.get("password")
+       #print("username =", username)
+       #print("password =", password)
+       user = auth.authenticate(request, username=username, password=password)
+       if user is not None:
+           auth.login(request, user)
+       else:
+           # Return error message
+           pass
+   return redirect("index-page") #"home"
 
-
+def logout(request):
+    auth.logout(request)
+    return redirect("index-page") #"home"
