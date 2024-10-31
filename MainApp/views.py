@@ -10,12 +10,21 @@ def index_page(request):
 
 
 def add_snippet_page(request):
-    form = SnippetForm()
-    context = {
-        'pagename': 'Добавление нового сниппета',
-        'form': form 
-        }
-    return render(request, 'pages/add_snippet.html', context)
+    # Создаем пустую форму при запросе методом GET
+    if request.method == "GET":
+        form = SnippetForm()
+        context = {
+            'pagename': 'Добавление нового сниппета',
+            'form': form 
+            }
+        return render(request, 'pages/add_snippet.html', context)
+    # Получаем данные из формы и на их основе создаем новый snippet в БД
+    if request.method == "POST":
+       form = SnippetForm(request.POST)
+       if form.is_valid():
+           form.save()
+           return redirect("snippets-page") # GET /snippets/list
+       return render(request,'pages/add_snippet.html',{'form': form})
 
 
 def snippets_page(request):
@@ -42,25 +51,25 @@ def snippet_detail(request, snippet_id: int):
     return render(request, 'pages/snippet_detail.html', context) 
 
 
-def create_snippet(request):
-    #если в запросе метод POST, то распечатает значения
-    #<QueryDict: {'csrfmiddlewaretoken': ['vRxqcWoOa4fXwxHZnu1H6Qtrn4mKGN54jefQ8Jqewc2TKcjYo65tpt2ro5yZWDyA'], 
-    # 'name': ['third'], 'lang': ['cpp'], 'code': ['cout']}>
-    #[31/Oct/2024 13:26:12] "POST /snippets/create HTTP/1.1" 200 4
+# def create_snippet(request):
+#     #если в запросе метод POST, то распечатает значения
+#     #<QueryDict: {'csrfmiddlewaretoken': ['vRxqcWoOa4fXwxHZnu1H6Qtrn4mKGN54jefQ8Jqewc2TKcjYo65tpt2ro5yZWDyA'], 
+#     # 'name': ['third'], 'lang': ['cpp'], 'code': ['cout']}>
+#     #[31/Oct/2024 13:26:12] "POST /snippets/create HTTP/1.1" 200 4
 
-    #from pprint import pprint
+#     #from pprint import pprint
 
-    # if request.method == "POST":
-    #     pprint(vars(request))
-    #     pprint(request.POST)
-    #     return HttpResponse("Done")
+#     # if request.method == "POST":
+#     #     pprint(vars(request))
+#     #     pprint(request.POST)
+#     #     return HttpResponse("Done")
     
-    if request.method == "POST":
-        form = SnippetForm(request.POST)
-        if form.is_valid():
-            form.save()
-            return redirect("snippets-page") # GET /snippets/list
-        return render(request,'pages/add_snippet.html',{'form': form})
+#     if request.method == "POST":
+#         form = SnippetForm(request.POST)
+#         if form.is_valid():
+#             form.save()
+#             return redirect("snippets-page") # GET /snippets/list
+#         return render(request,'pages/add_snippet.html',{'form': form})
 
 
 
