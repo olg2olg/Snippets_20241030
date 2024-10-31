@@ -14,10 +14,18 @@
                 {# <form action="{% url "snippet-create" %}" method="post"> #}
                 <form action="" method="post">
                     {% csrf_token %}
+                    {% comment %}
                     <table>
                         {{ form }}
                     </table>
-                    <input type="submit" value="Submit"/>                 
+                    {% endcomment %}
+                    {{ form.as_p }}
+                    <div class="form_group_row">
+                        <div class="col-6">
+                            <input type="submit" class="btn btn-primary btn-block" value="Создать сниппет"/>
+                        </div>
+                    </div>
+                    {# input type="submit" value="Submit"/> #}
                 </form>
             </div>
         </div>
