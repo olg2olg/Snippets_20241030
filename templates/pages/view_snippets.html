@@ -28,6 +28,7 @@
                         {# <th scope="col">Удалить</th> #}
                         <th scope="col">Удалить(button)</th>
                         <th scope="col">Пользователь</th>
+                        <th scope="col">Тип сниппета</th
                     </tr>
                     </thead>
                     <tbody>
@@ -35,7 +36,8 @@
                         <tr>
                             <td scope="row">{{ snippet.id }}</td>
                             <td><a href="{% url "snippet-detail" snippet.id %}">{{ snippet.name }}</a>
-                                {% if request.user.is_authenticated and request.user.id == snippet.user_id %}
+                                {# {% if request.user.is_authenticated and request.user.id == snippet.user_id %} #}
+                                {% if request.user == snippet.user %}
                                     <a href="{% url "snippet-delete" snippet.id %}">
                                         <i style="color: red;" class="fa-solid fa-trash"></i></a>
                                         {#  class="fa-solid fa-trash fa-flip fa-spin" #}
@@ -59,6 +61,13 @@
                             </td>
 
                             <td> {{ snippet.user.username }} </td>
+                            <td> 
+                                {% if snippet.is_public %}
+                                    Публичный
+                                {% else %}
+                                    Приватный
+                                {% endif %}
+                            </td>
                         </tr>
                     {% endfor %}
                     </tbody>

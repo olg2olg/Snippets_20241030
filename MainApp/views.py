@@ -67,6 +67,7 @@ def snippet_detail(request, snippet_id: int):
     context['type'] = "view"
     return render(request, 'pages/snippet_detail.html', context) 
 
+@login_required
 def snippet_edit(request, snippet_id:int):
     #pass
     context = { 'pagename': 'Редактирование сниппета' }
@@ -100,6 +101,7 @@ def snippet_edit(request, snippet_id:int):
         snippet.save()
         return redirect("snippets-page") # GET /snippets/list
 
+@login_required
 def snippet_delete(request, snippet_id:int):
     #if request.method == "POST":
     if request.method == "POST" or request.method == "GET": #GET для рис=Корзина     
