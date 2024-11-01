@@ -72,7 +72,8 @@ def snippet_edit(request, snippet_id:int):
     #pass
     context = { 'pagename': 'Редактирование сниппета' }
     try:
-        snippet = Snippet.objects.get(id=snippet_id)
+        #snippet = Snippet.objects.get(id=snippet_id)
+        snippet = Snippet.objects.filter(user=request.user).get(id=snippet_id)
     except  ObjectDoesNotExist:
         return Http404
     
@@ -98,6 +99,9 @@ def snippet_edit(request, snippet_id:int):
         #snippet.lang = data_form["lang"]
         snippet.code = data_form["code"]
         #snippet.creation_date = data_form["creation_date"]
+        # Если ключ is_public усть в словаре, берем значение.
+        # Если нет - присваиваем атрибуту is_public значение False
+        snippet.is_public = data_form.get("is_public", False)
         snippet.save()
         return redirect("snippets-page") # GET /snippets/list
 
@@ -105,7 +109,8 @@ def snippet_edit(request, snippet_id:int):
 def snippet_delete(request, snippet_id:int):
     #if request.method == "POST":
     if request.method == "POST" or request.method == "GET": #GET для рис=Корзина     
-        snippet = get_object_or_404(Snippet, id=snippet_id)
+        #snippet = get_object_or_404(Snippet, id=snippet_id)
+        snippet = get_object_or_404(Snippet.objects.filter(user=request.user), id=snippet_id)
         snippet.delete()
     return redirect('snippets-page')
 
