@@ -133,7 +133,13 @@ def login(request):
            auth.login(request, user)
        else:
            # Return error message
-           pass
+           # pass
+           # если пользователь не верно вводит логин-пароль, то сообщать ему
+           context = {
+               "pagename": "PythonBin",
+               "errors": ['wrong username or password']
+           }
+           return render(request, "pages/index/html", context)
    return redirect("index-page") #"home"
 
 def logout(request):
