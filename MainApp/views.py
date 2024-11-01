@@ -1,8 +1,8 @@
-from django.http import Http404, HttpResponse #HttpResponseNotFound
+from django.http import Http404, HttpResponse,HttpResponseNotFound,HttpResponseNotAllowed
 from django.shortcuts import get_object_or_404, render, redirect
 from MainApp.models import Snippet
 from django.core.exceptions import ObjectDoesNotExist
-from MainApp.forms import SnippetForm, UserRegistrationForm
+from MainApp.forms import SnippetForm, UserRegistrationForm, CommentForm
 from django.contrib import auth
 from django.contrib.auth.decorators import login_required
 
@@ -64,8 +64,10 @@ def snippet_detail(request, snippet_id: int):
     #     'pagename': 'Просмотр сниппета',
     #     'snippet': snippet
     #     }
+    comments_form = CommentForm()
     context['snippet'] = snippet
     context['type'] = "view"
+    context["comments_form"] = comments_form
     return render(request, 'pages/snippet_detail.html', context) 
 
 @login_required
@@ -152,7 +154,7 @@ def login(request):
                "pagename": "PythonBin",
                "errors": ['wrong username or password']
            }
-           return render(request, "pages/index/html", context)
+           return render(request, "pages/index.html", context)
    return redirect("index-page") #"home"
 
 # def login_url(request):
@@ -178,4 +180,20 @@ def create_user(request):
             return redirect('index-page') #"home"
         context['form'] = form
         return render(request,'pages/registration.html', context)
+    
+@login_required    
+def comments_add(request):
+    if request.method =="POST":
+        comment_form = CommentForm(request.POST)
+        if comment_form.is_valid():
+            snippet_id = request.POST.get("snippet_id")
+            snippet = Snippet.objects.get(id=snippet_id)
+            comment = comment_form.save(commit=False)
+            comment.author = request.user
+            comment.snippet = snippet
+            comment.save()
+            return redirect("snippet-detail", snippet_id=snippet.id)
+    return HttpResponseNotAllowed(['POST'])
+
+
         
