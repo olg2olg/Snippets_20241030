@@ -42,10 +42,12 @@ def snippets_page(request):
         }
     return render(request, 'pages/view_snippets.html', context)
 
+#@login_required(login_url='login-url') #index-page') #"home"
+@login_required
 def my_snippets_page(request):
     snippets = Snippet.objects.filter(user_id=request.user.id)
     context = {
-        'pagename': 'Просмотр сниппетов',
+        'pagename': 'Мои сниппетов',
         'snippets': snippets
         }
     return render(request, 'pages/view_snippets.html', context)
@@ -144,6 +146,9 @@ def login(request):
            }
            return render(request, "pages/index/html", context)
    return redirect("index-page") #"home"
+
+# def login_url(request):
+#     return render(request, "pages/only_login.html", {"pagename": "Only login"}) 
 
 def logout(request):
     auth.logout(request)
